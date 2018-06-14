@@ -84,7 +84,7 @@ By default, the container attempts to recover the data to the given database by 
 
 If the container was started with the environment variable `MYSQL_RESTORE_PATH` then a compressed dump file for each database is written to the given destination.
 
-Example to write the Dumps directly to your working directory:
+Example to write the dumps directly to your working directory:
 
 ```bash
 docker run -d \
