@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Get databases to backup
+
+databases=`echo "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME NOT IN ('information_schema','performance_schema') ORDER BY SCHEMA_NAME;" | \
+mysql -Bs`
+
+# Echo backup/restore strings for director
+
+for i in $databases; do
+  echo "bpipe:file=/MYSQL/$i:reader=sh -c 'mysqldump --force --opt --compress --add-drop-database --databases $i':writer=sh -c '/etc/bareos/scripts/restore-db.sh $i'"
+done
