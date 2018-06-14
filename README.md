@@ -13,8 +13,8 @@ Start container from image freinet/bareos-client and add volumes to be included 
 docker run -d \
   -p 9102:9102 \
   -e BAREOS_FD_PASSWORD=secret_shared_with_director \
-  -v <my_volume1>:/volumes/my_volume \
-  -v <my_volume2>:/volumes/my_volume2 \
+  -v my_volume1:/volumes/my_volume \
+  -v my_volume2:/volumes/my_volume2 \
   freinet/bareos-client
 ```
 
