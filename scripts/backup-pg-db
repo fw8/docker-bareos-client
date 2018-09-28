@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Get databases to backup
+
+databases=`psql -t -c "SELECT datname FROM pg_database WHERE datname NOT in ('template1', 'template0')"`
+
+# Echo backup/restore strings for director
+
+for i in $databases; do
+  echo "bpipe:file=/POSTGRES/$i:reader=sh -c 'pg_dump --clean --if-exists --dbname=$i':writer=sh -c '/etc/bareos/scripts/restore-pg-db.sh $i'"
+done
