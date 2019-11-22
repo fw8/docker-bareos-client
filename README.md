@@ -94,7 +94,8 @@ docker run -d \
   freinet/bareos-client
 ```
 
-### Postgres
+### Backup Postgres using bpipe plugin
+
 Note: Everything works exactly as for mysql, except for the environment variables being the standard postgres ones, and for the backup script to use in your fileset being called "backup-pg-db".
 
 Start container from image freinet/bareos-client and add the database to be included into your backup by using environment variables:
@@ -108,6 +109,7 @@ docker run -d \
   -p 9102:9102 \
   -e BAREOS_FD_PASSWORD=secret_shared_with_director \
   -e PGUSER=postgres \
+  -e PGPASSWORD=qa$$vvoRb \
   -e PGHOST=db \
   freinet/bareos-client
 ```
@@ -116,7 +118,7 @@ Create a corresponding fileset in your bareos director:
 
 ```config
 FileSet{
-  Name = "mysql_stream"
+  Name = "pgdump_stream"
   Include {
     Options {
       Signature = MD5
