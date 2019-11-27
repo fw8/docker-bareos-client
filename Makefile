@@ -9,9 +9,9 @@ help: ## This help.
 .DEFAULT_GOAL := help
 
 build: ## build the container
-	docker build --tag freinet/bareos-client:17.2 .
-	docker build --tag freinet/bareos-client:latest .
+	docker build --tag freinet/bareos-client:18.2 .
+#	docker build --tag freinet/bareos-client:latest .
 
 push: ## push to docker hub
-	docker push freinet/bareos-client:17.2
-	docker push freinet/bareos-client:latest
+	docker push freinet/bareos-client:18.2
+#	docker push freinet/bareos-client:latest
