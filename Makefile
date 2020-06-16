@@ -1,9 +1,5 @@
 NAME   := freinet/bareos-client
 COMMIT_ID := $$(git log -1 --date=short --pretty=format:%cd.%h)
-TAG   := $$(git describe --exact-match --tags $$(git log -n1 --pretty='%h'))
-IMG    := ${NAME}:${COMMIT_ID}
-GIT_TAGGED := ${NAME}:${TAG}
-LATEST := ${NAME}:latest
 
 # HELP
 # This will output the help for each task
@@ -16,10 +12,11 @@ help: ## This help.
 .DEFAULT_GOAL := help
 
 build: ## build the container
-
-	docker build --tag freinet/bareos-client:18.2 .
-	docker build --tag freinet/bareos-client:latest .
+	docker build --tag ${NAME}:${COMMIT_ID} .
+	docker build --tag ${NAME}:18.2 .
+	docker build --tag ${NAME}:latest .
 
 push: ## push to docker hub
-	docker push freinet/bareos-client:18.2
-	docker push freinet/bareos-client:latest
+	docker push ${NAME}:${COMMIT_ID}
+	docker push ${NAME}:18.2
+	docker push ${NAME}:latest
