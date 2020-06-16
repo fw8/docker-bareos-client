@@ -40,17 +40,17 @@ _Stolen from <https://github.com/Brightside56/bareos-client-docker>_
 
 Start container from image freinet/bareos-client and add the database to be included into your backup by using environment variables:
 
-* `MYSQL_ADMIN_USER` (default is `root`)
-* `MYSQL_ADMIN_PASSWORD`
-* `MYSQL_HOST` (default is `db`)
+* `BAREOS_MYSQL_USER` (default is `root`)
+* `BAREOS_MYSQL_PASSWORD`
+* `BAREOS_MYSQL_HOST` (default is `db`)
 
 ```bash
 docker run -d \
   -p 9102:9102 \
   -e BAREOS_FD_PASSWORD=secret_shared_with_director \
-  -e MYSQL_ADMIN_USER=root \
-  -e MYSQL_ADMIN_PASSWORD=secret \
-  -e MYSQL_HOST=db \
+  -e BAREOS_MYSQL_USER=root \
+  -e BAREOS_MYSQL_PASSWORD=secret \
+  -e BAREOS_MYSQL_HOST=db \
   freinet/bareos-client
 ```
 
@@ -82,7 +82,7 @@ There are two ways to restore the backup using the method described.
 
 By default, the container attempts to recover the data to the given database by first dropping each database and then recreating it from the backup.
 
-If the container was started with the environment variable `MYSQL_RESTORE_PATH` then a compressed dump file for each database is written to the given destination.
+If the container was started with the environment variable `BAREOS_MYSQL_RESTORE_PATH` then a compressed dump file for each database is written to the given destination.
 
 Example to write the dumps directly to your working directory:
 
@@ -90,7 +90,7 @@ Example to write the dumps directly to your working directory:
 docker run -d \
   -p 9102:9102 \
   -e BAREOS_FD_PASSWORD=secret_shared_with_director \
-  -e MYSQL_RESTORE_PATH=`pwd` \
+  -e BAREOS_MYSQL_RESTORE_PATH=`pwd` \
   freinet/bareos-client
 ```
 
@@ -100,17 +100,17 @@ Note: Everything works exactly as for mysql, except for the environment variable
 
 Start container from image freinet/bareos-client and add the database to be included into your backup by using environment variables:
 
-* `PGUSER` (default for superuser is `postgres`)
-* `PGPASSWORD`
-* `PGHOST`
+* `BAREOS_PG_USER` (default for superuser is `postgres`)
+* `BAREOS_PG_PASSWORD`
+* `BAREOS_PG_HOST`
 
 ```bash
 docker run -d \
   -p 9102:9102 \
   -e BAREOS_FD_PASSWORD=secret_shared_with_director \
-  -e PGUSER=postgres \
-  -e PGPASSWORD=qa$$vvoRb \
-  -e PGHOST=db \
+  -e BAREOS_PG_USER=postgres \
+  -e BAREOS_PG_PASSWORD=qa$$vvoRb \
+  -e BAREOS_PG_HOST=db \
   freinet/bareos-client
 ```
 
@@ -130,4 +130,4 @@ FileSet{
 }
 ```
 
-Restoration is the same as well, if you don't want to restore directly to the database, set POSTGRESQL_RESTORE_PATH
+Restoration is the same as well, if you don't want to restore directly to the database, set BAREOS_PG_RESTORE_PATH

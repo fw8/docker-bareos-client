@@ -1,27 +1,27 @@
-FROM ubuntu:xenial
+FROM ubuntu:bionic
 LABEL maintainer="Florian Wolpert <wolpert@freinet.de>"
 LABEL contributors="Sebastian Pitsch <pitsch@freinet.de>"
 
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get -y install curl software-properties-common vim
+RUN apt-get update && apt-get -y install curl software-properties-common vim less
 
 
-RUN curl -Ls http://download.bareos.org/bareos/release/17.2/xUbuntu_16.04/Release.key | apt-key --keyring /etc/apt/trusted.gpg.d/breos-keyring.gpg add - && \
-    echo 'deb http://download.bareos.org/bareos/release/17.2/xUbuntu_16.04/ /' > /etc/apt/sources.list.d/bareos.list && \
+RUN curl -Ls http://download.bareos.org/bareos/release/18.2/xUbuntu_18.04/Release.key | apt-key --keyring /etc/apt/trusted.gpg.d/breos-keyring.gpg add - && \
+    echo 'deb http://download.bareos.org/bareos/release/18.2/xUbuntu_18.04/ /' > /etc/apt/sources.list.d/bareos.list && \
     apt-get update -qq && \
     apt-get install -qq -y bareos-client && \
     apt-get clean
 
 RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8 && \
-    add-apt-repository 'deb [arch=amd64,arm64,i386,ppc64el] http://ftp.hosteurope.de/mirror/mariadb.org/repo/10.3/ubuntu xenial main' && \
+    add-apt-repository 'deb [arch=amd64,arm64,i386,ppc64el] http://ftp.hosteurope.de/mirror/mariadb.org/repo/10.3/ubuntu bionic main' && \
     apt-get update -qq && \
     apt-get install -qq -y mariadb-client && \
     apt-get clean
 
 RUN curl -Ls https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key --keyring /etc/apt/trusted.gpg.d/breos-keyring.gpg add - && \
-    echo "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main" > /etc/apt/sources.list.d/psql.list && \
+    echo "deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main" > /etc/apt/sources.list.d/psql.list && \
     apt-get update -qq && \
-    apt-get install -qq -y postgresql-client-10 && \
+    apt-get install -qq -y postgresql-client-12 && \
     apt-get clean
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
@@ -31,6 +31,10 @@ RUN tar cfvz /bareos-fd.tgz /etc/bareos/bareos-fd.d
 
 RUN mkdir /etc/bareos/scripts
 COPY scripts/* /etc/bareos/scripts/
+
+RUN echo "export PGHOST=\$BAREOS_PG_HOST" >> /root/.bashrc && \
+    echo "export PGUSER=\$BAREOS_PG_USER" >> /root/.bashrc && \
+    echo "export PGPASSWORD=\$BAREOS_PG_PASSWORD" >> /root/.bashrc
 
 # create pseudo-user and add bareos to the group
 # this way bpipe is able to write to a mapped user volume

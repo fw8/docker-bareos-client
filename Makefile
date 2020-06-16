@@ -16,16 +16,10 @@ help: ## This help.
 .DEFAULT_GOAL := help
 
 build: ## build the container
-	@docker build -t ${IMG} .
-	@if [ ! -z $$(git describe --exact-match --tags $$(git log -n1 --pretty='%h')) ] ; then \
-		echo ${GIT_TAGGED} ; \
-		docker tag ${IMG} ${GIT_TAGGED} ; \
-	fi ;
 
-tag-latest: ## please call build-latest instead
-	@docker tag ${IMG} ${LATEST}
+	docker build --tag freinet/bareos-client:18.2 .
+	docker build --tag freinet/bareos-client:latest .
 
-build-latest: build tag-latest ## build and tag as latest
-
-push: build-latest ## push image to repo
-	@docker push ${NAME}
+push: ## push to docker hub
+	docker push freinet/bareos-client:18.2
+	docker push freinet/bareos-client:latest
