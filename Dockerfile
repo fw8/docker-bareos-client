@@ -32,6 +32,10 @@ RUN tar cfvz /bareos-fd.tgz /etc/bareos/bareos-fd.d
 RUN mkdir /etc/bareos/scripts
 COPY scripts/* /etc/bareos/scripts/
 
+RUN echo "export PGHOST=\$BAREOS_PG_HOST" >> /root/.bashrc && \
+    echo "export PGUSER=\$BAREOS_PG_USER" >> /root/.bashrc && \
+    echo "export PGPASSWORD=\$BAREOS_PG_PASSWORD" >> /root/.bashrc
+
 # create pseudo-user and add bareos to the group
 # this way bpipe is able to write to a mapped user volume
 #RUN useradd -u 1000 volume-user && usermod -a -G volume-user bareos
